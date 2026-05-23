@@ -70,7 +70,7 @@
     </style>
     <script>
         async function getBooks() {
-            const response = await fetch('http://localhost:8000/api/books');
+            const response = await fetch('/api/books');
             const books = await response.json();
             console.log(books);
         }
@@ -90,7 +90,7 @@
                 copies: copies
             };
 
-            const response = await fetch('http://localhost:8000/api/books', {
+            const response = await fetch('/api/books', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -116,7 +116,7 @@
                 copies: copies
             };
 
-            const response = await fetch(`http://localhost:8000/api/books/${id}`, {
+            const response = await fetch(`/api/books/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -131,7 +131,7 @@
 async function deleteBook() {
             const id = document.getElementById('delete-id').value;
 
-            await fetch(`http://localhost:8000/api/books/${id}`, {
+            await fetch(`/api/books/${id}`, {
                 method: 'DELETE'
             });
 
