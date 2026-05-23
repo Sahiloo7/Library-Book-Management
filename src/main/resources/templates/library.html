@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 5px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .get-books {
+            background-color: #e0f7fa;
+        }
+        .add-book {
+            background-color: #ffe0b2;
+        }
+        .update-book {
+            background-color: #c8e6c9;
+        }
+
+    </style>
+    <script>
+        async function getBooks() {
+            const response = await fetch('http://localhost:8000/api/books');
+            const books = await response.json();
+            console.log(books);
+        }
+
+        async function addBook() {
+            const title = document.getElementById('add-title').value;
+            const isbn = document.getElementById('add-isbn').value;
+            const authorname = document.getElementById('add-authorname').value;
+            const pubyear = parseInt(document.getElementById('add-pubyear').value);
+            const copies = parseInt(document.getElementById('add-copies').value);
+
+            const book = {
+                title: title,
+                isbn: isbn,
+                authorname: authorname,
+                pubyear: pubyear,
+                copies: copies
+            };
+
+            const response = await fetch('http://localhost:8000/api/books', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(book)
+            });
+
+            const newBook = await response.json();
+            console.log(newBook);
+        }
+
+        async function updateBook() {
+            const id = document.getElementById('update-id').value;
+            const title = document.getElementById('update-title').value;
+            const authorname = document.getElementById('update-authorname').value;
+            const pubyear = parseInt(document.getElementById('update-pubyear').value);
+            const copies = parseInt(document.getElementById('update-copies').value);
+
+            const book = {
+                title: title,
+                authorname: authorname,
+                pubyear: pubyear,
+                copies: copies
+            };
+
+            const response = await fetch(`http://localhost:8000/api/books/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(book)
+            });
+
+            const updatedBook = await response.json();
+            console.log(updatedBook);
+        }
+
+async function deleteBook() {
+            const id = document.getElementById('delete-id').value;
+
+            await fetch(`http://localhost:8000/api/books/${id}`, {
+                method: 'DELETE'
+            });
+
+            console.log(`Book with id ${id} deleted`);
+        }
+
+
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1>Library API</h1>
+
+    <div class="section get-books">
+        <h2>Get Books</h2>
+        <button onclick="getBooks()">Get Books</button>
+    </div>
+
+    <div class="section add-book">
+        <h2>Add Book</h2>
+        <label>Title: <input type="text" id="add-title"></label>
+        <label>ISBN: <input type="text" id="add-isbn"></label>
+        <label>Author Name: <input type="text" id="add-authorname"></label>
+        <label>Publication Year: <input type="number" id="add-pubyear"></label>
+        <label>Copies: <input type="number" id="add-copies"></label>
+        <button onclick="addBook()">Add Book</button>
+    </div>
+
+    <div class="section update-book">
+        <h2>Update Book</h2>
+        <label>ID: <input type="number" id="update-id"></label>
+        <label>Title: <input type="text" id="update-title"></label>
+        <label>Author Name: <input type="text" id="update-authorname"></label>
+        <label>Publication Year: <input type="number" id="update-pubyear"></label>
+        <label>Copies: <input type="number" id="update-copies"></label>
+        <button onclick="updateBook()">Update Book</button>
+    </div>
+    <div class="section delete-book">
+        <h2>Delete Book</h2>
+        <label>ID: <input type="number" id="delete-id"></label>
+        <button onclick="deleteBook()">Delete Book</button>
+    </div>
+</div>
+</body>
+</html>
